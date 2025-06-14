@@ -24,7 +24,7 @@ public class Warrior implements Army {
 
     this.visibility = null;
     this._telescope = new Telescope(this);
-    this._satellite = new Satellite();
+    this._satellite = new Satellite(this);
   }
 
   public int getPower() {
