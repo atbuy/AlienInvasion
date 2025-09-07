@@ -10,6 +10,7 @@ import org.invasion.armies.Warrior;
 import org.invasion.attacks.AttackType;
 import org.invasion.attacks.FullAttack;
 import org.invasion.attacks.PartialAttack;
+import org.invasion.utils.Observable;
 
 public class Game {
   private Warrior warrior;
@@ -31,18 +32,20 @@ public class Game {
 
     // Structure attacks to map option number to attack type
     Map<Integer, AttackType> attacks = new HashMap<>() {
-        {
-            put(1, partialAttack);
-            put(2, fullAttack);
-        }
+      {
+        put(1, partialAttack);
+        put(2, fullAttack);
+      }
     };
+
+    this.warriorResetArmy();
 
     // Start main game loop
     while (true) {
       // Select an attack type
       int attackOption = this.getArmyAttackType(scanner);
       AttackType attackType = attacks.get(attackOption);
-      System.out.printf("Attack type selected: %s%n", attackType);
+      System.out.printf("Attack type selected: %s%n", attackType.getName());
 
       // Update warrior's visibility tool after selecting attack type
       this.warrior.decideVisibility(attackOption);
@@ -62,6 +65,19 @@ public class Game {
       // The warrior is attacked. This also updates the warrior's visibility tool
       int newPower = attackType.attack(this.warrior);
       this.warrior.setPower(newPower);
+      this.warrior.updateVisibility();
+
+      System.out.println("You attacked the warrior and his power has fallen!");
+      System.out.println("During this attack, the warrior detected your soldiers and is preparing to attack back!");
+
+      this.showState();
+
+      // Let the warrior attack the alien army.
+      // The warrior uses the visibility tool
+      // to determine how many aliens will be defeated.
+      int attacked = this.warrior.attack();
+
+      System.out.printf("The Warrior attacked back! You have lost %d soldiers!%n", attacked);
 
       // Show state after both turns
       this.showState();
@@ -78,7 +94,6 @@ public class Game {
         break;
       }
 
-
       // Detach visibility tool from the selected attack type
       if (attackOption == 1) {
         ((PartialAttack) attackType).detach(this.warrior.getVisibility());
@@ -86,6 +101,10 @@ public class Game {
         ((FullAttack) attackType).detach(this.warrior.getVisibility());
       }
     }
+  }
+
+  public void warriorResetArmy() {
+    this.warrior.setArmy(this.alienArmy);
   }
 
   public void showVictory() {
@@ -114,11 +133,11 @@ public class Game {
 
     // Map strength options to actual values
     Map<Integer, Integer> strengthMap = new HashMap<>() {
-        {
-            put(1, 100);
-            put(2, 200);
-            put(3, 300);
-        }
+      {
+        put(1, 100);
+        put(2, 200);
+        put(3, 300);
+      }
     };
 
     // Continuously ask for warrior strength, until given an option

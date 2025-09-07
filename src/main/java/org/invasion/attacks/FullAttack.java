@@ -14,6 +14,11 @@ public class FullAttack implements AttackType, Observable {
   List<Observer> observers = new ArrayList<Observer>();
   private AlienArmy army;
   private int soldiers;
+  public String name = "FullAttack";
+
+  public String getName() {
+    return this.name;
+  }
 
   @Override
   public void setArmy(AlienArmy army) {
@@ -23,7 +28,7 @@ public class FullAttack implements AttackType, Observable {
   @Override
   public void decideAttackStrength(Scanner s) {
     this.soldiers = this.army.getArmySize();
-    System.out.println(String.format("You will be attacking will all of your %d soldiers.", this.soldiers));
+    System.out.printf("You will be attacking will all of your %d soldiers.%n", this.soldiers);
   }
 
   @Override
@@ -47,5 +52,4 @@ public class FullAttack implements AttackType, Observable {
       observer.update();
     }
   }
-
 }

@@ -14,6 +14,7 @@ public class Warrior implements Army {
   private Telescope _telescope;
   private Satellite _satellite;
   private AlienArmy army;
+  public int lastAttackCount;
 
   public Warrior(AlienArmy army) {
     // Set random amount of power for warrior
@@ -21,10 +22,15 @@ public class Warrior implements Army {
     this.power = r.nextInt(100, 200);
 
     this.army = army;
+    this.lastAttackCount = 0;
 
     this.visibility = null;
     this._telescope = new Telescope(this);
     this._satellite = new Satellite(this);
+  }
+
+  public void setArmy(AlienArmy army) {
+    this.army = army;
   }
 
   public int getPower() {
@@ -37,6 +43,7 @@ public class Warrior implements Army {
 
   public int getHit(int armySize) {
     this.power -= armySize;
+    this.lastAttackCount = armySize;
     return this.power;
   }
 
@@ -46,6 +53,16 @@ public class Warrior implements Army {
 
   private void setVisibility(Visibility visibility) {
     this.visibility = visibility;
+  }
+
+  public int attack() {
+    // Check how many aliens were recorded from the visibility tool.
+    // Telescope returns the entire amount of aliens attacking,
+    // and Satellite returns only about 50% of the army's attack.
+    int aliens = this.visibility.getAliens();
+    this.army.getAttacked(aliens);
+
+    return aliens;
   }
 
   public void decideVisibility(int attackOption) {
@@ -58,7 +75,10 @@ public class Warrior implements Army {
       this.setVisibility(this._telescope);
       return;
     }
+  }
 
-    return;
+  public void updateVisibility() {
+    this._satellite.update();
+    this._telescope.update();
   }
 }

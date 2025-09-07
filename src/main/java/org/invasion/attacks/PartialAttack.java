@@ -13,7 +13,12 @@ public class PartialAttack implements AttackType, Observable {
 
   private AlienArmy army;
   private int soldiers;
-  private List<Observer> observers = new ArrayList<Observer>();
+  private List<Observer> observers = new ArrayList<>();
+  public String name = "PartialAttack";
+
+  public String getName() {
+    return this.name;
+  }
 
   public int getAttackPower() {
     return this.soldiers;
@@ -38,7 +43,7 @@ public class PartialAttack implements AttackType, Observable {
 
     // Get soldiers to attack with, within allowed range
     while (soldierAmount < 1 || soldierAmount > armySize) {
-      System.out.println(String.format("Select between 1 and %d soldiers.", armySize));
+      System.out.printf("Select between 1 and %d soldiers.%n", armySize);
       System.out.print("Soldiers: ");
 
       try {

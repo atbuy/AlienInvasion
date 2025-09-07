@@ -10,4 +10,10 @@ public class AlienArmy implements Army {
   public void setArmySize(int armySize) {
     this.armySize = armySize;
   }
+
+  public void getAttacked(int count) {
+    int armySize = this.armySize;
+    int newSize = armySize - count;
+    this.setArmySize(newSize);
+  }
 }
