@@ -30,11 +30,11 @@ public class Game {
     fullAttack.setArmy(this.alienArmy);
 
     // Structure attacks to map option number to attack type
-    Map<Integer, AttackType> attacks = new HashMap<Integer, AttackType>() {
-      {
-        put(1, partialAttack);
-        put(2, fullAttack);
-      }
+    Map<Integer, AttackType> attacks = new HashMap<>() {
+        {
+            put(1, partialAttack);
+            put(2, fullAttack);
+        }
     };
 
     // Start main game loop
@@ -42,7 +42,7 @@ public class Game {
       // Select an attack type
       int attackOption = this.getArmyAttackType(scanner);
       AttackType attackType = attacks.get(attackOption);
-      System.out.println(String.format("Attack type selected: %s", attackType));
+      System.out.printf("Attack type selected: %s%n", attackType);
 
       // Update warrior's visibility tool after selecting attack type
       this.warrior.decideVisibility(attackOption);
@@ -97,7 +97,7 @@ public class Game {
   }
 
   public void initializeWarrior(Scanner s) {
-    this.warrior = new Warrior();
+    this.warrior = new Warrior(this.alienArmy);
     this.warrior.setPower(this.getWarriorStrength(s));
   }
 
@@ -113,12 +113,12 @@ public class Game {
   public int getWarriorStrength(Scanner s) {
 
     // Map strength options to actual values
-    Map<Integer, Integer> strengthMap = new HashMap<Integer, Integer>() {
-      {
-        put(1, 100);
-        put(2, 200);
-        put(3, 300);
-      }
+    Map<Integer, Integer> strengthMap = new HashMap<>() {
+        {
+            put(1, 100);
+            put(2, 200);
+            put(3, 300);
+        }
     };
 
     // Continuously ask for warrior strength, until given an option
@@ -139,7 +139,6 @@ public class Game {
         strength = Integer.parseInt(scannedStrength);
 
         if (strength < 1 || strength > 3) {
-          scanned = false;
           System.out.println("Please input a number between 1 and 3.");
           continue;
         }
@@ -152,9 +151,7 @@ public class Game {
 
     // Get a random value to add/subtract from the strength
     int strengthNoise = new Random().nextInt(-20, 20);
-    int finalStrength = strengthMap.get(strength) + strengthNoise;
-
-    return finalStrength;
+    return strengthMap.get(strength) + strengthNoise;
   }
 
   public int getAlienArmySize() {
@@ -184,7 +181,6 @@ public class Game {
         attackType = Integer.parseInt(scannedAttack);
 
         if (attackType < 1 || attackType > 2) {
-          scanned = false;
           System.out.println("Please input a either (1) or (2).");
           continue;
         }
@@ -208,7 +204,7 @@ public class Game {
         soldiers = Integer.parseInt(s.nextLine());
 
         if (soldiers > this.alienArmy.getArmySize()) {
-          System.out.println(String.format("You can't select more than %d soldiers.", this.alienArmy.getArmySize()));
+          System.out.printf("You can't select more than %d soldiers.%n", this.alienArmy.getArmySize());
 
         }
       } catch (NumberFormatException e) {
@@ -220,7 +216,7 @@ public class Game {
   }
 
   public void showState() {
-    System.out.println(String.format("-- Warrior strength: %d power", this.warrior.getPower()));
-    System.out.println(String.format("-- Alien army size: %d soldiers", this.alienArmy.getArmySize()));
+    System.out.printf("-- Warrior strength: %d power%n", this.warrior.getPower());
+    System.out.printf("-- Alien army size: %d soldiers%n", this.alienArmy.getArmySize());
   }
 }
